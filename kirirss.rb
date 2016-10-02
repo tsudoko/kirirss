@@ -7,7 +7,7 @@ require 'nokogiri'
 require 'toml'
 
 def make_tag(elem, options, name)
-    tag = options[name]
+    tag = options["tag"][name]
     contents = nil
 
     if tag["use-root"]
@@ -59,11 +59,13 @@ def make_feed(html, options)
 
                 html.css(options["elem-selector"]).each do |elem|
                     xml.item {
-                        xml.title       make_tag(elem, options, "title")
-                        xml.description make_tag(elem, options, "description")
-                        xml.link        make_tag(elem, options, "link")
-                        xml.guid        make_tag(elem, options, "guid")
-                        xml.pubDate     make_tag(elem, options, "pubDate")
+                        options["tag"].each do |tag|
+                            if tag[1]["out-attributes"]
+                                xml.send(tag[0], make_tag(elem, options, tag[0]), tag[1]["out-attributes"])
+                            else
+                                xml.send(tag[0], make_tag(elem, options, tag[0]))
+                            end
+                        end
                     }
                 end
             }
