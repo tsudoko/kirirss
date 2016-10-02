@@ -10,31 +10,38 @@ def make_tag(elem, options, name)
     tag = options[name]
     contents = nil
 
-    if tag["selector"]
+    if tag["use-root"]
+        match = elem
+    elsif tag["selector"]
+        match = elem.at_css(tag["selector"])
+    else
+        match = nil
+    end
+
+    if match
         if tag["attribute"]
-            contents = elem.at_css(tag["selector"]).attr(tag["attribute"])
+            contents = match.attr(tag["attribute"])
+        elsif tag["strip-html"]
+            contents = match.text#.strip
         else
-            match = elem.at_css(tag["selector"])
-            if match 
-                contents = match.content.strip
-            end
-        end
-
-        if tag["date-format"]
-            if tag["date-format"] == "auto"
-                time = Chronic.parse(contents, :context => :past)
-            else
-                time = Time.strptime(contents, tag["date-format"])
-            end
-
-            contents = time.rfc2822.to_s
-        end
-
-        if tag["is-url"]
-            contents = URI.join(options["feed-link"], contents).to_s
+            contents = match.content.strip
         end
     else
         contents = tag["placeholder"]
+    end
+
+    if tag["date-format"]
+        if tag["date-format"] == "auto"
+            time = Chronic.parse(contents, :context => :past)
+        else
+            time = Time.strptime(contents, tag["date-format"])
+        end
+
+        contents = time.rfc2822.to_s
+    end
+
+    if tag["is-url"]
+        contents = URI.join(options["feed-link"], contents).to_s
     end
 
     return contents
