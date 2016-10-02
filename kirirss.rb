@@ -6,14 +6,14 @@ require 'chronic'
 require 'nokogiri'
 require 'toml'
 
-def make_tag(elem, options, name)
+def make_tag(root, options, name)
     tag = options["tag"][name]
     contents = nil
 
     if tag["use-root"]
-        match = elem
+        match = root
     elsif tag["selector"]
-        match = elem.at_css(tag["selector"])
+        match = root.at_css(tag["selector"])
     else
         match = nil
     end
@@ -57,13 +57,13 @@ def make_feed(html, options)
                 xml.link        options["feed-link"]
                 xml.generator   "kirirss" # version?
 
-                html.css(options["elem-selector"]).each do |elem|
+                html.css(options["root-selector"]).each do |root|
                     xml.item {
                         options["tag"].each do |tag|
                             if tag[1]["out-attributes"]
-                                xml.send(tag[0], make_tag(elem, options, tag[0]), tag[1]["out-attributes"])
+                                xml.send(tag[0], make_tag(root, options, tag[0]), tag[1]["out-attributes"])
                             else
-                                xml.send(tag[0], make_tag(elem, options, tag[0]))
+                                xml.send(tag[0], make_tag(root, options, tag[0]))
                             end
                         end
                     }
