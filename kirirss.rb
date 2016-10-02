@@ -21,8 +21,6 @@ def make_tag(root, options, name)
     if match
         if tag["attribute"]
             contents = match.attr(tag["attribute"])
-        elsif tag["strip-html"]
-            contents = match.text#.strip
         else
             contents = match.content.strip
         end
