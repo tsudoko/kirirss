@@ -1,0 +1,20 @@
+feed-link = ""
+root-selector = ""
+
+[tag.title]
+selector = ""
+
+[tag.link]
+selector = "a"
+attribute = "href"
+is-url = true
+
+[tag.guid]
+selector = "a"
+attribute = "href"
+is-url = true
+
+[tag.pubDate]
+selector = ""
+attribute = ""
+date-format = "auto"

@@ -1,0 +1,25 @@
+# Recently updated GitHub repos which match the "rss" search query
+
+feed-link = "https://github.com/search?o=desc&q=rss&s=updated&type=Repositories&utf8=%E2%9C%93"
+root-selector = ".repo-list li"
+
+[tag.title]
+selector = "a"
+
+[tag.description]
+selector = "p"
+
+[tag.link]
+selector = "a"
+attribute = "href"
+is-url = true
+
+[tag.guid]
+selector = "a"
+attribute = "href"
+is-url = true
+
+[tag.pubDate]
+selector = "relative-time"
+attribute = "datetime"
+date-format = "auto"
