@@ -91,7 +91,11 @@ if __FILE__ == $0
     abort "usage: #{File.basename($0)} configfile"
   end
 
-  options = TOML.load_file(ARGV[0])
+  begin
+    options = TOML.load_file(ARGV[0])
+  rescue => e
+    abort "error: #{e}"
+  end
 
   if !options["feed-link"]
     abort "feed-link is missing"
