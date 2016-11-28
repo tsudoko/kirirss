@@ -7,6 +7,9 @@ require 'nokogiri'
 require 'toml'
 
 module KiriRSS
+  class ConfigError < StandardError
+  end
+
   private_class_method def self.make_tag(root, options, name)
     tag = options["tag"][name]
     contents = nil
@@ -49,6 +52,12 @@ module KiriRSS
   end
 
   def self.make_feed(html, options)
+    required_fields = ["feed-link", "root-selector"]
+
+    required_fields.each do |f|
+      raise ConfigError.new("required field '#{f}' not found") if !options[f]
+    end
+
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.rss(:version => "2.0") {
         xml.channel {
@@ -78,8 +87,21 @@ module KiriRSS
 end
 
 if __FILE__ == $0
+  if ARGV.empty?
+    abort "usage: #{File.basename($0)} configfile"
+  end
+
   options = TOML.load_file(ARGV[0])
+
+  if !options["feed-link"]
+    abort "feed-link is missing"
+  end
+
   content = Net::HTTP.get(URI(options["feed-link"]))
 
-  puts KiriRSS.make_feed(Nokogiri.HTML(content, options["feed-link"]), options)
+  begin
+    puts KiriRSS.make_feed(Nokogiri.HTML(content, options["feed-link"]), options)
+  rescue KiriRSS::ConfigError => e
+    abort "config error: #{e}"
+  end
 end
