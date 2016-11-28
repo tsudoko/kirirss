@@ -97,10 +97,14 @@ if __FILE__ == $0
     abort "feed-link is missing"
   end
 
-  content = Net::HTTP.get(URI(options["feed-link"]))
+  uri = URI(options["feed-link"])
+  res = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+      request = Net::HTTP::Get.new(uri, options["headers"])
+      http.request(request)
+  end
 
   begin
-    puts KiriRSS.make_feed(Nokogiri.HTML(content, options["feed-link"]), options)
+    puts KiriRSS.make_feed(Nokogiri.HTML(res.body, options["feed-link"]), options)
   rescue KiriRSS::ConfigError => e
     abort "config error: #{e}"
   end
