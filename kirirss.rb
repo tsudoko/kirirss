@@ -28,18 +28,20 @@ def make_tag(root, options, name)
         contents = tag["placeholder"]
     end
 
-    if tag["date-format"]
-        if tag["date-format"] == "auto"
-            time = Chronic.parse(contents, :context => :past)
-        else
-            time = Time.strptime(contents, tag["date-format"])
+    if contents
+        if tag["date-format"]
+            if tag["date-format"] == "auto"
+                time = Chronic.parse(contents, :context => :past)
+            else
+                time = Time.strptime(contents, tag["date-format"])
+            end
+
+            contents = time.rfc2822.to_s
         end
 
-        contents = time.rfc2822.to_s
-    end
-
-    if tag["is-url"]
-        contents = URI.join(options["feed-link"], contents).to_s
+        if tag["is-url"]
+            contents = URI.join(options["feed-link"], contents).to_s
+        end
     end
 
     return contents
