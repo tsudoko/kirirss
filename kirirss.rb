@@ -75,7 +75,9 @@ def make_feed(html, options)
     return builder.to_xml
 end
 
-options = TOML.load_file(ARGV[0])
-content = Net::HTTP.get(URI(options["feed-link"]))
+if __FILE__ == $0
+    options = TOML.load_file(ARGV[0])
+    content = Net::HTTP.get(URI(options["feed-link"]))
 
-puts make_feed(Nokogiri.HTML(content, options["feed-link"]), options)
+    puts make_feed(Nokogiri.HTML(content, options["feed-link"]), options)
+end
