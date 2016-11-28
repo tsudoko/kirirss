@@ -69,7 +69,7 @@ module KiriRSS
 
           html.css(options["root-selector"]).each do |root|
             xml.item {
-              options["tag"].each do |tag|
+              (options["tag"] or {}).each do |tag|
                 if tag[1]["out-attributes"]
                   xml.send(tag[0], make_tag(root, options, tag[0]), tag[1]["out-attributes"])
                 else
