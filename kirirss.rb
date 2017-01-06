@@ -16,14 +16,14 @@ module KiriRSS
 
     if tag["use-root"]
       match = root
-    elsif tag["selector"]
+    elsif tag["selector"] != ""
       match = root.at_css(tag["selector"])
     else
       match = nil
     end
 
     if match
-      if tag["attribute"]
+      if tag.key? "attribute" and tag["attribute"] != ""
         contents = match.attr(tag["attribute"])
       else
         contents = match.content.strip
@@ -33,7 +33,7 @@ module KiriRSS
     end
 
     if contents
-      if tag["date-format"]
+      if tag.key? "date-format" and tag["date-format"] != ""
         if tag["date-format"] == "auto"
           time = Chronic.parse(contents, :context => :past)
         else
