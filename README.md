@@ -14,7 +14,7 @@ kirirss.
 Config file
 -----------
 
-Sample configs can be found in the `examples` directory.
+Sample configuration files can be found in the `misc` directory.
 
 Fields prefixed with 🔶 are required. "Skipped" means not present in the config
 file or empty. Note that even though some fields are not required, skipping them
