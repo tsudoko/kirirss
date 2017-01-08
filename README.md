@@ -5,6 +5,9 @@ Simple HTML→RSS converter. Can be easily integrated with cron, feed readers wi
 external script support or other Ruby applications. Input data is specified with
 CSS selectors.
 
+To make generating multiple feeds easier, the `kirirss-batch.sh` script can be
+used. It's in the `misc` directory.
+
 Dependencies
 ------------
 
