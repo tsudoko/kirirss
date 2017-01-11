@@ -82,7 +82,7 @@ module KiriRSS
       }
     end
 
-    return builder.to_xml
+    return builder.doc
   end
 end
 
@@ -108,7 +108,12 @@ if __FILE__ == $0
   end
 
   begin
-    puts KiriRSS.make_feed(Nokogiri.HTML(res.body, options["feed-link"]), options)
+    feed = KiriRSS.make_feed(Nokogiri.HTML(res.body, options["feed-link"]), options)
+    puts feed.to_xml
+
+    if feed.css("channel > item").empty?
+      STDERR.puts "warning: feed from #{options["feed-link"]} has no items"
+    end
   rescue KiriRSS::ConfigError => e
     abort "config error: #{e}"
   end
