@@ -89,7 +89,7 @@ Text used when the input tag is empty or not found.
 #### `date-format` (string)
 
 [strptime][1] format of the date in the contents. If a special "auto" value is
-given, the format is parsed heuristically with [chronic][2]. Output tag will
+given, the date is parsed heuristically with [chronic][2]. Output tag will
 contain a [RFC 2822][3]-formatted date. Contents will not be date-formatted if
 this field is skipped.
 
