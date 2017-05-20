@@ -21,3 +21,5 @@ die() {
 for i in "$@"; do
     "$KIRIRSS_DIR"/"$KIRIRSS_BIN" "$CONFIG_DIR"/"$i".toml > "$OUTPUT_DIR"/"$i".rss &
 done
+
+wait
